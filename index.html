@@ -24,6 +24,8 @@
         <button class="search-button">Search</button>
       </form>
 
+      <button id="current-location" class="location-button">📍 Current Location</button>
+
       <main>
         <div class="weather-data">
           <div>
@@ -35,11 +37,16 @@
           </div>
 
           <div class="temperature-container">
-            <div id="icon"></div>
+          <div id="icon"></div>
+          <div>
             <div class="temperature" id="temperature">--</div>
-            <div class="unit">°C</div>
+            <div class="unit-toggle">
+              <span id="celsius">°C</span> | <span id="fahrenheit">°F</span>
+            </div>
           </div>
         </div>
+      </div>
+
 
         <h2>Forecast</h2>
         <div class="forecast" id="forecast"></div>
