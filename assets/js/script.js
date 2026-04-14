@@ -18,8 +18,7 @@ function refreshWeather(response) {
   document.querySelector("#description").innerHTML = response.data.condition.description;
   document.querySelector("#humidity").innerHTML = response.data.temperature.humidity + "%";
   document.querySelector("#wind-speed").innerHTML = response.data.wind.speed + " km/h";
-  document.querySelector("#feels-like").innerHTML =
-    Math.round(response.data.temperature.feels_like) + "°";
+  document.querySelector("#feels-like").innerHTML = Math.round(response.data.temperature.feels_like) + "°";
 
   document.querySelector("#temperature").innerHTML = Math.round(currentTemp);
 
@@ -38,16 +37,6 @@ function refreshWeather(response) {
   // UPDATED TIME FEATURE
   document.querySelector("#updated-time").innerHTML =
     "Updated: " + new Date().toLocaleTimeString();
-
-  // FEELS LIKE COLOR
-  let feels = response.data.temperature.feels_like;
-  let feelsEl = document.querySelector("#feels-like");
-
-  feelsEl.classList.remove("hot", "mild", "cold");
-
-  if (feels >= 30) feelsEl.classList.add("hot");
-  else if (feels >= 18) feelsEl.classList.add("mild");
-  else feelsEl.classList.add("cold");
 
   getForecast(response.data.city);
 }
