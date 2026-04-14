@@ -137,6 +137,13 @@ h1,h2{text-align:center;font-weight:600;}
   font-size: 13px;
 }
 
+.max-temp, .min-temp {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+}
+
 .label {
   font-size: 10px;
   font-weight: 700;
@@ -162,6 +169,29 @@ h1,h2{text-align:center;font-weight:600;}
 /* OPTIONAL SMOOTH TRANSITION */
 #weather-content {
   transition: 0.3s ease;
+}
+
+.history {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.history-btn {
+  background: #e0e7ff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--primary);
+  transition: 0.2s;
+}
+
+.history-btn:hover {
+  background: #c7d2fe;
 }
 
 footer{margin-top:40px;text-align:center;color:var(--muted);font-size:14px;}
@@ -303,4 +333,27 @@ body.dark {
   .forecast-day {
     min-width: 80px;
   }
+}
+
+.history {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.history-btn {
+  background: #e0e7ff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--primary);
+  transition: 0.2s;
+}
+
+.history-btn:hover {
+  background: #c7d2fe;
 }
