@@ -246,6 +246,39 @@ footer a{color:var(--primary);text-decoration:none;font-weight:600;}
     scroll-snap-align: start;
   }
 
+  /* DARK MODE */
+body.dark {
+  --bg: #0f172a;          /* deep slate background */
+  --text: #e2e8f0;        /* light text for contrast */
+  --card-bg: #111827;     /* dark card surface */
+  --muted: #94a3b8;       /* muted text in dark mode */
+
+  --primary: #6a11cb;     /* keep brand colors consistent */
+  --secondary: #2575fc;
+  --accent: #f65282;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* LOADER */
+#loader {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+#loader::after {
+  content: " ...";
+  animation: dots 1s infinite steps(3, end);
+}
+
+@keyframes dots {
+  0% { content: ""; }
+  33% { content: "."; }
+  66% { content: ".."; }
+  100% { content: "..."; }
+}
+
   footer {
     font-size: 12px;
     line-height: 1.4;
