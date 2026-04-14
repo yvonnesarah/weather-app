@@ -45,6 +45,19 @@ Weather App Interface
 
 ![Screenshot](assets/images/before/weather-app.png "Weather App")
 
+After Design
+
+Weather App Interface
+
+![Screenshot](assets/images/after/weather-app.png "Weather App")
+
+## 🗺️ Roadmap (Planned Features)
+To enhance the functionality and user experience of the Weather App, the following improvements are planned:
+* 📍 Fetches weather based on the user's current location. ✅
+* 🌡 Allows users to toggle between Celsius and Fahrenheit. ✅
+* ⏱ Displays current day and time dynamically. ✅
+* ⚠️ Handles errors gracefully (e.g - city not found). ✅
+
 ## 👥 Credit
 Designed and developed by Yvonne Adedeji.
 
