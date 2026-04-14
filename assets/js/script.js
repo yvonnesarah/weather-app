@@ -1,6 +1,8 @@
+let history = [];
+
 let currentTemp = null;
 
-const cities = ["London", "Tokyo", "Paris", "New York", "Dubai", "Sydney", "Berlin"];
+const cities = ["Tokyo", "Paris", "New York", "Dubai", "Sydney", "Berlin"];
 
 // =====================
 // WEATHER DISPLAY
@@ -64,16 +66,43 @@ function searchCity(city) {
   let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
 
   axios.get(apiUrl)
-    .then(refreshWeather)
+  .then((response) => {
+    refreshWeather(response);
+    addToHistory(city);
+  })
     .catch(() => {
       document.querySelector("#loader").classList.add("hidden");
 
-      // ✅ IMPORTANT: hide old weather data
+      //  hide old weather data
       document.querySelector("#weather-content").classList.add("hidden");
 
       // show only error
       document.querySelector("#error-message").classList.remove("hidden");
     });
+}
+
+function addToHistory(city) {
+  city = city.trim();
+
+  if (!history.includes(city)) {
+    history.unshift(city);
+    if (history.length > 5) history.pop();
+    renderHistory();
+  }
+}
+
+function renderHistory() {
+  const historyDiv = document.querySelector("#history");
+
+  historyDiv.innerHTML = history
+    .map(city => `<button class="history-btn">${city}</button>`)
+    .join("");
+
+  document.querySelectorAll(".history-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      searchCity(btn.innerText);
+    });
+  });
 }
 
 // =====================
@@ -103,10 +132,21 @@ function displayForecast(response) {
       forecastHtml += `
         <div class="forecast-day ${index === 0 ? "today" : ""}">
           <div class="forecast-date">${formatDay(day.time)}</div>
+
           <img src="${day.condition.icon_url}" class="forecast-icon"/>
+
           <div class="forecast-temps">
-            <div class="max-temp"><strong>${Math.round(day.temperature.maximum)}º</strong></div>
-            <div class="min-temp">${Math.round(day.temperature.minimum)}º</div>
+
+            <div class="max-temp">
+              <span class="label">MAX</span>
+              <strong>${Math.round(day.temperature.maximum)}º</strong>
+            </div>
+
+            <div class="min-temp">
+              <span class="label">MIN</span>
+              ${Math.round(day.temperature.minimum)}º
+            </div>
+
           </div>
         </div>`;
     }
