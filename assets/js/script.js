@@ -70,10 +70,19 @@ function displayForecast(response) {
       forecastHtml += `
         <div class="forecast-day ${index === 0 ? "today" : ""}">
           <div class="forecast-date">${formatDay(day.time)}</div>
+
           <img src="${day.condition.icon_url}" class="forecast-icon"/>
+
           <div class="forecast-temps">
-            <strong>${Math.round(day.temperature.maximum)}º</strong><br/>
-            ${Math.round(day.temperature.minimum)}º
+            <div class="max-temp">
+              <span class="label">MAX</span>
+              <strong>${Math.round(day.temperature.maximum)}º</strong>
+            </div>
+
+            <div class="min-temp">
+              <span class="label">MIN</span>
+              <span>${Math.round(day.temperature.minimum)}º</span>
+            </div>
           </div>
         </div>`;
     }
