@@ -1,21 +1,26 @@
 let currentTemp = null;
-let currentLat = null;
-let currentLon = null;
 
-// Refresh UI (SUCCESS)
+const cities = ["London", "Tokyo", "Paris", "New York", "Dubai", "Sydney", "Berlin"];
+
+// =====================
+// WEATHER DISPLAY
+// =====================
 function refreshWeather(response) {
+  document.querySelector("#loader").classList.add("hidden");
   document.querySelector("#error-message").classList.add("hidden");
   document.querySelector("#weather-content").classList.remove("hidden");
 
   currentTemp = response.data.temperature.current;
 
   document.querySelector("#city").innerHTML = response.data.city;
-  document.querySelector("#country").innerHTML = response.data.country; 
+  document.querySelector("#country").innerHTML = response.data.country;
 
   document.querySelector("#description").innerHTML = response.data.condition.description;
   document.querySelector("#humidity").innerHTML = response.data.temperature.humidity + "%";
   document.querySelector("#wind-speed").innerHTML = response.data.wind.speed + " km/h";
-  document.querySelector("#feels-like").innerHTML = Math.round(response.data.temperature.feels_like) + "°";
+  document.querySelector("#feels-like").innerHTML =
+    Math.round(response.data.temperature.feels_like) + "°";
+
   document.querySelector("#temperature").innerHTML = Math.round(currentTemp);
 
   document.querySelector("#icon").innerHTML =
@@ -24,18 +29,32 @@ function refreshWeather(response) {
   let date = new Date(response.data.time * 1000);
   document.querySelector("#time").innerHTML = formatDate(date);
 
-
-  //  (coordinates)
   document.querySelector("#latitude").innerHTML =
     response.data.coordinates.latitude.toFixed(2);
 
   document.querySelector("#longitude").innerHTML =
     response.data.coordinates.longitude.toFixed(2);
 
+  // UPDATED TIME FEATURE
+  document.querySelector("#updated-time").innerHTML =
+    "Updated: " + new Date().toLocaleTimeString();
+
+  // FEELS LIKE COLOR
+  let feels = response.data.temperature.feels_like;
+  let feelsEl = document.querySelector("#feels-like");
+
+  feelsEl.classList.remove("hot", "mild", "cold");
+
+  if (feels >= 30) feelsEl.classList.add("hot");
+  else if (feels >= 18) feelsEl.classList.add("mild");
+  else feelsEl.classList.add("cold");
+
   getForecast(response.data.city);
 }
 
-// Format date
+// =====================
+// FORMAT DATE
+// =====================
 function formatDate(date) {
   let minutes = date.getMinutes();
   if (minutes < 10) minutes = "0" + minutes;
@@ -44,12 +63,13 @@ function formatDate(date) {
   return `${days[date.getDay()]} ${date.getHours()}:${minutes}`;
 }
 
-// Search city
+// =====================
+// SEARCH CITY
+// =====================
 function searchCity(city) {
-  document.querySelector("#city").innerHTML = "Loading...";
-  document.querySelector("#temperature").innerHTML = "...";
-  document.querySelector("#description").innerHTML = "Fetching weather...";
-  document.querySelector("#icon").innerHTML = "⏳";
+  document.querySelector("#loader").classList.remove("hidden");
+  document.querySelector("#weather-content").classList.add("hidden");
+  document.querySelector("#error-message").classList.add("hidden");
 
   let apiKey = "8bcecf3b930c0252ec9aa584f9do621t";
   let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
@@ -57,24 +77,28 @@ function searchCity(city) {
   axios.get(apiUrl)
     .then(refreshWeather)
     .catch(() => {
-      document.querySelector("#error-message").classList.remove("hidden");
+      document.querySelector("#loader").classList.add("hidden");
+
+      // ✅ IMPORTANT: hide old weather data
       document.querySelector("#weather-content").classList.add("hidden");
 
-      currentTemp = null;
+      // show only error
+      document.querySelector("#error-message").classList.remove("hidden");
     });
 }
 
-// Handle search
-function handleSearchSubmit(event) {
-  event.preventDefault();
-  let city = document.querySelector("#search-input").value;
-  searchCity(city);
-}
-
+// =====================
+// FORM SUBMIT
+// =====================
 document.querySelector("#search-form")
-  .addEventListener("submit", handleSearchSubmit);
+  .addEventListener("submit", (event) => {
+    event.preventDefault();
+    searchCity(document.querySelector("#search-input").value);
+  });
 
-// Forecast
+// =====================
+// FORECAST
+// =====================
 function getForecast(city) {
   let apiKey = "8bcecf3b930c0252ec9aa584f9do621t";
   let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
@@ -82,7 +106,6 @@ function getForecast(city) {
   axios.get(apiUrl).then(displayForecast);
 }
 
-// Display forecast
 function displayForecast(response) {
   let forecastHtml = "";
 
@@ -93,15 +116,8 @@ function displayForecast(response) {
           <div class="forecast-date">${formatDay(day.time)}</div>
           <img src="${day.condition.icon_url}" class="forecast-icon"/>
           <div class="forecast-temps">
-            <div class="max-temp">
-              <span class="label">MAX</span>
-              <strong>${Math.round(day.temperature.maximum)}º</strong>
-            </div>
-
-            <div class="min-temp">
-              <span class="label">MIN</span>
-              <span>${Math.round(day.temperature.minimum)}º</span>
-            </div>
+            <div class="max-temp"><strong>${Math.round(day.temperature.maximum)}º</strong></div>
+            <div class="min-temp">${Math.round(day.temperature.minimum)}º</div>
           </div>
         </div>`;
     }
@@ -110,30 +126,49 @@ function displayForecast(response) {
   document.querySelector("#forecast").innerHTML = forecastHtml;
 }
 
-// Format day
 function formatDay(timestamp) {
   return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(timestamp * 1000).getDay()];
 }
 
-// Current location
+// =====================
+// CURRENT LOCATION
+// =====================
 document.querySelector("#current-location").addEventListener("click", () => {
   navigator.geolocation.getCurrentPosition((position) => {
-    let lat = position.coords.latitude;
-    let lon = position.coords.longitude;
-
     let apiKey = "8bcecf3b930c0252ec9aa584f9do621t";
-    let apiUrl = `https://api.shecodes.io/weather/v1/current?lon=${lon}&lat=${lat}&key=${apiKey}&units=metric`;
+    let url = `https://api.shecodes.io/weather/v1/current?lat=${position.coords.latitude}&lon=${position.coords.longitude}&key=${apiKey}&units=metric`;
 
-    axios.get(apiUrl).then(refreshWeather);
+    axios.get(url).then(refreshWeather);
   });
 });
 
-// Unit toggle
+// =====================
+// DARK MODE
+// =====================
+document.querySelector("#theme-toggle").addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  const btn = document.querySelector("#theme-toggle");
+  btn.innerHTML = document.body.classList.contains("dark")
+    ? "☀️ Light Mode"
+    : "🌙 Dark Mode";
+});
+
+// =====================
+// RANDOM CITY
+// =====================
+document.querySelector("#random-city").addEventListener("click", () => {
+  let random = cities[Math.floor(Math.random() * cities.length)];
+  searchCity(random);
+});
+
+// =====================
+// UNIT TOGGLE
+// =====================
 document.querySelector("#fahrenheit").addEventListener("click", () => {
   if (currentTemp === null) return;
-
-  let fahrenheit = (currentTemp * 9) / 5 + 32;
-  document.querySelector("#temperature").innerHTML = Math.round(fahrenheit);
+  document.querySelector("#temperature").innerHTML =
+    Math.round((currentTemp * 9) / 5 + 32);
 
   document.querySelector("#fahrenheit").classList.add("active-unit");
   document.querySelector("#celsius").classList.remove("active-unit");
@@ -141,15 +176,14 @@ document.querySelector("#fahrenheit").addEventListener("click", () => {
 
 document.querySelector("#celsius").addEventListener("click", () => {
   if (currentTemp === null) return;
-
   document.querySelector("#temperature").innerHTML = Math.round(currentTemp);
 
   document.querySelector("#celsius").classList.add("active-unit");
   document.querySelector("#fahrenheit").classList.remove("active-unit");
 });
 
-// Autofocus input
+// =====================
+// DEFAULT
+// =====================
 document.querySelector("#search-input").focus();
-
-// Default city
 searchCity("London");
