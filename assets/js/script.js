@@ -104,6 +104,16 @@ document.querySelector("#current-location").addEventListener("click", () => {
 document.querySelector("#fahrenheit").addEventListener("click", () => {
   let fahrenheit = (currentTemp * 9) / 5 + 32;
   document.querySelector("#temperature").innerHTML = Math.round(fahrenheit);
+
+  document.querySelector("#fahrenheit").classList.add("active-unit");
+  document.querySelector("#celsius").classList.remove("active-unit");
+});
+
+document.querySelector("#celsius").addEventListener("click", () => {
+  document.querySelector("#temperature").innerHTML = Math.round(currentTemp);
+
+  document.querySelector("#celsius").classList.add("active-unit");
+  document.querySelector("#fahrenheit").classList.remove("active-unit");
 });
 
 document.querySelector("#celsius").addEventListener("click", () => {
