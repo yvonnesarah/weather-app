@@ -1,83 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 
-    <link rel="stylesheet" href="assets/css/styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <title>Weather App</title>
+</head>
 
-    <title>Weather App</title>
-  </head>
+<body>
+  <div class="weather-app">
+    <h1>Weather App</h1>
 
-  <body>
-    <div class="weather-app">
-      <h1>Weather App</h1>
+    <form class="search-form" id="search-form">
+      <input type="search" id="search-input" class="search-input" placeholder="Search city..." required />
+      <button class="search-button">Search</button>
+    </form>
 
-      <form class="search-form" id="search-form">
-        <input type="search" id="search-input" class="search-input" placeholder="Search city..." required />
-        <button class="search-button">Search</button>
-      </form>
+    <button id="current-location" class="location-button">📍 Current Location</button>
+    <button id="theme-toggle" class="location-button">🌙 Dark Mode</button>
+    <button id="random-city" class="location-button">🎲 Random City</button>
 
-      <button id="current-location" class="location-button">📍 Current Location</button>
+    <main>
 
-      <main>
+      <div id="loader" class="hidden">⏳ Loading...</div>
 
-<!-- ERROR MESSAGE -->
       <div id="error-message" class="error-message hidden">
         <p>⚠️ City not found</p>
         <small>Try searching for another city</small>
       </div>
 
-       <!-- WEATHER CONTENT -->
-        <div id="weather-content">
+      <div id="weather-content">
 
         <div class="weather-data">
           <div>
             <div class="city" id="city">—</div>
             <div class="country" id="country">—</div>
+
             <p class="details">
               <span id="time">--</span>, <span id="description">--</span><br />
-              Humidity: <strong id="humidity">--</strong>, Wind: <strong id="wind-speed">--</strong>, Feels Like: <strong id="feels-like">--</strong>
+              Humidity: <strong id="humidity">--</strong>, Wind: <strong id="wind-speed">--</strong>,
+              Feels Like: <strong id="feels-like">--</strong>
               <br />
-             Coordinates: 
-            Latitude: <strong id="latitude">--</strong>, 
-            Longitude: <strong id="longitude">--</strong>
+              Coordinates:
+              Latitude: <strong id="latitude">--</strong>,
+              Longitude: <strong id="longitude">--</strong>
             </p>
+
+            <p id="updated-time" class="details"></p>
           </div>
 
           <div class="temperature-container">
-          <div id="icon"></div>
-          <div>
-            <div class="temperature" id="temperature">--</div>
-            <div class="unit-toggle">
-              <span id="celsius" class="active-unit">°C Celsius</span>
-              <span class="separator">|</span>
-              <span id="fahrenheit">°F Fahrenheit</span>
-             </div>
+            <div id="icon"></div>
+            <div>
+              <div class="temperature" id="temperature">--</div>
+              <div class="unit-toggle">
+                <span id="celsius" class="active-unit">°C Celsius</span>
+                <span class="separator">|</span>
+                <span id="fahrenheit">°F Fahrenheit</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <br>
-      <br>
+        <br />
+        <br />
 
         <h2>Forecast</h2>
         <div class="forecast" id="forecast"></div>
-       </div>
-      </main>
 
-      <footer>
-        Coded by <a href="https://github.com/yvonnesarah" target="_blank">Yvonne Adedeji</a> — Open source on <a href="https://github.com/yvonnesarah/weather-app" target="_blank">GitHub</a> — Hosted on
+      </div>
+    </main>
+
+    <footer>
+      Coded by <a href="https://github.com/yvonnesarah" target="_blank">Yvonne Adedeji</a> — Open source on <a href="https://github.com/yvonnesarah/weather-app" target="_blank">GitHub</a> — Hosted on
         <a href="https://ya-weather-app.netlify.app/" target="_blank">Netlify</a>.
-      </footer>
-    </div>
+    </footer>
+  </div>
 
-    <script src="assets/js/script.js"></script>
-  </body>
+  <script src="assets/js/script.js"></script>
+</body>
 </html>
