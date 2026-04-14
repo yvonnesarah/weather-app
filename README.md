@@ -42,6 +42,7 @@ Application can be viewed here:
 Before Design
 
 Weather App Interface
+
 ![Screenshot](assets/images/before/weather-app.png "Weather App")
 
 ## 👥 Credit
