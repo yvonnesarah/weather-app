@@ -27,6 +27,16 @@
       <button id="current-location" class="location-button">📍 Current Location</button>
 
       <main>
+
+<!-- ERROR MESSAGE -->
+      <div id="error-message" class="error-message hidden">
+        <p>⚠️ City not found</p>
+        <small>Try searching for another city</small>
+      </div>
+
+       <!-- WEATHER CONTENT -->
+        <div id="weather-content">
+
         <div class="weather-data">
           <div>
             <div class="city" id="city">—</div>
@@ -54,6 +64,7 @@
 
         <h2>Forecast</h2>
         <div class="forecast" id="forecast"></div>
+       </div>
       </main>
 
       <footer>
