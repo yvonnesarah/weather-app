@@ -1,4 +1,6 @@
 let currentTemp = null;
+let currentLat = null;
+let currentLon = null;
 
 // Refresh UI (SUCCESS)
 function refreshWeather(response) {
@@ -8,9 +10,12 @@ function refreshWeather(response) {
   currentTemp = response.data.temperature.current;
 
   document.querySelector("#city").innerHTML = response.data.city;
+  document.querySelector("#country").innerHTML = response.data.country; 
+
   document.querySelector("#description").innerHTML = response.data.condition.description;
   document.querySelector("#humidity").innerHTML = response.data.temperature.humidity + "%";
   document.querySelector("#wind-speed").innerHTML = response.data.wind.speed + " km/h";
+  document.querySelector("#feels-like").innerHTML = Math.round(response.data.temperature.feels_like) + "°";
   document.querySelector("#temperature").innerHTML = Math.round(currentTemp);
 
   document.querySelector("#icon").innerHTML =
@@ -18,6 +23,14 @@ function refreshWeather(response) {
 
   let date = new Date(response.data.time * 1000);
   document.querySelector("#time").innerHTML = formatDate(date);
+
+
+  //  (coordinates)
+  document.querySelector("#latitude").innerHTML =
+    response.data.coordinates.latitude.toFixed(2);
+
+  document.querySelector("#longitude").innerHTML =
+    response.data.coordinates.longitude.toFixed(2);
 
   getForecast(response.data.city);
 }
