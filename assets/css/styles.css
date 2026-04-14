@@ -73,15 +73,106 @@ footer{margin-top:40px;text-align:center;color:var(--muted);font-size:14px;}
 footer a{color:var(--primary);text-decoration:none;font-weight:600;}
 
 /* Responsive */
-@media(max-width:700px){
-  .weather-app-data{flex-direction:column;text-align:center;}
-  .weather-app-temperature{font-size:60px;}
-}
 
-@media(max-width:480px){
-  .weather-app{padding:18px;}
-  h1{font-size:26px;}
-  .weather-app-city{font-size:26px;}
-  .weather-app-temperature{font-size:48px;}
-  .weather-app-unit{font-size:18px;}
+@media (max-width: 768px) {
+
+  body {
+    padding: 12px;
+  }
+
+  .weather-app {
+    padding: 18px;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  /* STACK MAIN WEATHER SECTION */
+  .weather-data {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .city {
+    font-size: 28px;
+  }
+
+  .details {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  /* TEMPERATURE SECTION */
+  .temperature-container {
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .temperature {
+    font-size: 48px;
+    margin-left: 0;
+  }
+
+  #icon img {
+    width: 60px;
+  }
+
+  /* SEARCH FORM STACK */
+  .search-form {
+    flex-direction: column;
+  }
+
+  .search-input,
+  .search-button{
+    width: 100%;
+  }
+
+  #current-location {
+    display: none;
+  }
+}
+  /* FORECAST SCROLL FIX */
+  .forecast {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .forecast-day {
+    min-width: 90px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  footer {
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 10px;
+  }
+
+/* SMALL PHONES */
+@media (max-width: 480px) {
+
+  .weather-app {
+    padding: 14px;
+  }
+
+  .city {
+    font-size: 24px;
+  }
+
+  .temperature {
+    font-size: 42px;
+  }
+
+  .forecast-day {
+    min-width: 80px;
+  }
 }
