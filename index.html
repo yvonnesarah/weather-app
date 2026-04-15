@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic page setup -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Google Fonts (Inter font family) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
+  <!-- External CSS file -->
   <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <!-- Axios library for API requests -->
   <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 
   <title>Weather App</title>
@@ -16,52 +21,72 @@
 
 <body>
   <div class="weather-app">
+
+    <!-- App title -->
     <h1>Weather App</h1>
 
+    <!-- Search form for city input -->
     <form class="search-form" id="search-form">
       <input type="search" id="search-input" class="search-input" placeholder="Search city..." required />
       <button class="search-button">Search</button>
     </form>
 
+    <!-- Search history container -->
     <div id="history" class="history"></div>
 
+    <!-- Action buttons -->
     <button id="current-location" class="location-button">📍 Current Location</button>
     <button id="theme-toggle" class="location-button">🌙 Dark Mode</button>
     <button id="random-city" class="location-button">🎲 Random City</button>
 
     <main>
 
+      <!-- Loading indicator -->
       <div id="loader" class="hidden">⏳ Loading...</div>
 
+      <!-- Error message display -->
       <div id="error-message" class="error-message hidden">
         <p>⚠️ City not found</p>
         <small>Try searching for another city</small>
       </div>
 
+      <!-- Weather content wrapper -->
       <div id="weather-content">
 
+        <!-- Current weather section -->
         <div class="weather-data">
           <div>
+
+            <!-- Location info -->
             <div class="city" id="city">—</div>
             <div class="country" id="country">—</div>
 
+            <!-- Weather details -->
             <p class="details">
               <span id="time">--</span>, <span id="description">--</span><br />
-              Humidity: <strong id="humidity">--</strong>, Wind: <strong id="wind-speed">--</strong>,
+
+              Humidity: <strong id="humidity">--</strong>, 
+              Wind: <strong id="wind-speed">--</strong>,
               Feels Like: <strong id="feels-like">--</strong>
               <br />
+
               Coordinates:
               Latitude: <strong id="latitude">--</strong>,
               Longitude: <strong id="longitude">--</strong>
             </p>
 
+            <!-- Last updated time -->
             <p id="updated-time" class="details"></p>
           </div>
 
+          <!-- Temperature + icon section -->
           <div class="temperature-container">
             <div id="icon"></div>
+
             <div>
               <div class="temperature" id="temperature">--</div>
+
+              <!-- Unit toggle (Celsius / Fahrenheit) -->
               <div class="unit-toggle">
                 <span id="celsius" class="active-unit">°C Celsius</span>
                 <span class="separator">|</span>
@@ -71,40 +96,48 @@
           </div>
         </div>
 
-        <br />
-        <br />
+        <br /><br />
 
+        <!-- Forecast section -->
         <h2>Forecast</h2>
         <div class="forecast" id="forecast"></div>
 
-        <br />
-        <br />
+        <br /><br />
 
+        <!-- Nearby cities section -->
         <h2>Nearby Cities</h2>
-      <div id="nearby" class="nearby"></div>
+        <div id="nearby" class="nearby"></div>
 
-      <br />
-      <br />
+        <br /><br />
 
-<h2>👕 What Should I Wear?</h2>
-<div id="advice" class="details" style="text-align:center; margin-top:10px;"></div>
+        <!-- Clothing suggestion section -->
+        <h2>👕 What Should I Wear?</h2>
+        <div id="advice" class="details" style="text-align:center; margin-top:10px;"></div>
 
-     <br />
-     <br />
+        <br /><br />
 
-     <h2>🧠 AI Weather Assistant</h2>
-      <div id="ai-box" class="ai-box">
-     <p id="ai-text">Ask me about the weather...</p>
-      </div>
+        <!-- AI assistant section -->
+        <h2>🧠 AI Weather Assistant</h2>
+        <div id="ai-box" class="ai-box">
+          <p id="ai-text">Ask me about the weather...</p>
+        </div>
+
       </div>
     </main>
 
+    <!-- Footer with credits and links -->
     <footer>
-      Coded by <a href="https://github.com/yvonnesarah" target="_blank">Yvonne Adedeji</a> — Open source on <a href="https://github.com/yvonnesarah/weather-app" target="_blank">GitHub</a> — Hosted on
-        <a href="https://ya-weather-app.netlify.app/" target="_blank">Netlify</a>.
+      Coded by 
+      <a href="https://github.com/yvonnesarah" target="_blank">Yvonne Adedeji</a> — 
+      Open source on 
+      <a href="https://github.com/yvonnesarah/weather-app" target="_blank">GitHub</a> — 
+      Hosted on
+      <a href="https://ya-weather-app.netlify.app/" target="_blank">Netlify</a>.
     </footer>
+
   </div>
 
+  <!-- Main JavaScript file -->
   <script src="assets/js/script.js"></script>
 </body>
 </html>
