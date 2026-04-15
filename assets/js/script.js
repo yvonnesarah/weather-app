@@ -1,9 +1,17 @@
+// =====================
+// APP STATE
+// =====================
+
+// Stores last searched cities (max 5)
 let history = [];
 
+// Stores current temperature (used for unit conversion)
 let currentTemp = null;
 
+// Predefined random cities for "Random City" feature
 const cities = ["Tokyo", "Paris", "New York", "Dubai", "Sydney", "Berlin"];
 
+// Full dataset of cities with coordinates (used for nearby feature)
 const cityCoordinates = [
   // Europe
   { city: "London", lat: 51.5072, lon: -0.1276 },
@@ -76,6 +84,8 @@ const cityCoordinates = [
 // =====================
 // WEATHER DISPLAY
 // =====================
+
+// Renders main weather UI from API response
 function refreshWeather(response) {
   document.querySelector("#loader").classList.add("hidden");
   document.querySelector("#error-message").classList.add("hidden");
@@ -83,34 +93,41 @@ function refreshWeather(response) {
 
   currentTemp = response.data.temperature.current;
 
+// City & country
   document.querySelector("#city").innerHTML = response.data.city;
   document.querySelector("#country").innerHTML = response.data.country;
 
+// Weather details
   document.querySelector("#description").innerHTML = response.data.condition.description;
   document.querySelector("#humidity").innerHTML = response.data.temperature.humidity + "%";
   document.querySelector("#wind-speed").innerHTML = response.data.wind.speed + " km/h";
   document.querySelector("#feels-like").innerHTML = Math.round(response.data.temperature.feels_like) + "°";
 
-  document.querySelector("#temperature").innerHTML = Math.round(currentTemp);
-
+// Temperature + icon
+  document.querySelector("#temperature").innerHTML = Math.round(currentTemp);  
   document.querySelector("#icon").innerHTML =
     `<img src="${response.data.condition.icon_url}" />`;
 
+ // Time formatting
   let date = new Date(response.data.time * 1000);
   document.querySelector("#time").innerHTML = formatDate(date);
 
+// Coordinates display
   document.querySelector("#latitude").innerHTML =
     response.data.coordinates.latitude.toFixed(2);
 
   document.querySelector("#longitude").innerHTML =
     response.data.coordinates.longitude.toFixed(2);
 
+ // Forecast + nearby cities
   getForecast(response.data.city);
   getNearby(
   response.data.city,
   response.data.coordinates.latitude,
   response.data.coordinates.longitude
 );
+
+// AI insight + clothing advice
 
 // AI Assistant
 const aiText = generateAIWeatherInsight(response.data);
@@ -122,13 +139,18 @@ clothingAdvice(
   response.data.condition.description.toLowerCase()
 );
 
-// UPDATED TIME FEATURE
+// Live update timestamp
   setInterval(() => {
   document.querySelector("#updated-time").innerHTML =
     "Updated: " + new Date().toLocaleTimeString();
 }, 1000);
 }
 
+// =====================
+// GEO / DISTANCE LOGIC
+// =====================
+
+// Calculates distance between two coordinates (Haversine formula)
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // km
 
@@ -147,6 +169,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+// Fetch weather by coordinates (used for nearby clicks + geolocation)
 function searchCityByCoords(lat, lon) {
   document.querySelector("#loader").classList.remove("hidden");
   document.querySelector("#weather-content").classList.add("hidden");
@@ -167,6 +190,8 @@ function searchCityByCoords(lat, lon) {
     });
 }
 
+
+// Finds nearest cities and renders buttons
 function getNearby(city, lat, lon) {
   if (typeof lat !== "number" || typeof lon !== "number") return;
 
@@ -191,19 +216,20 @@ function getNearby(city, lat, lon) {
   }
 
   container.innerHTML = sorted
-    .map(c => `
-      <button 
-        class="history-btn nearby-btn" 
-        data-city="${c.city}"
-        data-lat="${c.lat}"
-        data-lon="${c.lon}"
-      >
-        📍 ${c.city} <span class="muted">(${Math.round(c.distance)} km)</span>
-      </button>
-    `)
-    .join("");
+  .map(c => `
+    <button 
+      class="nearby-btn" 
+      data-city="${c.city}"
+      data-lat="${c.lat}"
+      data-lon="${c.lon}"
+    >
+      <span>📍 ${c.city}</span>
+      <small>${Math.round(c.distance)} km</small>
+    </button>
+  `)
+  .join("");
 
-  // ✅ UPDATED CLICK HANDLER
+   // Attach click handlers
   container.querySelectorAll(".nearby-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const lat = parseFloat(btn.dataset.lat);
@@ -219,8 +245,10 @@ function getNearby(city, lat, lon) {
 }
 
 // =====================
-// FORMAT DATE
+// DATE FORMATTING
 // =====================
+
+// Formats API timestamp into readable string
 function formatDate(date) {
   let minutes = date.getMinutes();
   if (minutes < 10) minutes = "0" + minutes;
@@ -230,8 +258,10 @@ function formatDate(date) {
 }
 
 // =====================
-// SEARCH CITY
+// SEARCH FUNCTION
 // =====================
+
+// Searches weather by city name
 function searchCity(city) {
   document.querySelector("#loader").classList.remove("hidden");
   document.querySelector("#weather-content").classList.add("hidden");
@@ -256,6 +286,11 @@ function searchCity(city) {
     });
 }
 
+// =====================
+// HISTORY SYSTEM
+// =====================
+
+// Adds city to recent search history
 function addToHistory(city) {
   city = city.trim();
 
@@ -266,6 +301,7 @@ function addToHistory(city) {
   }
 }
 
+// Renders clickable search history buttons
 function renderHistory() {
   const historyDiv = document.querySelector("#history");
 
@@ -280,6 +316,11 @@ function renderHistory() {
   });
 }
 
+// =====================
+// AI INSIGHT SYSTEM
+// =====================
+
+// Generates smart weather-based advice text
 function generateAIWeatherInsight(data) {
   const temp = Math.round(data.temperature.current);
   const condition = data.condition.description.toLowerCase();
@@ -288,7 +329,7 @@ function generateAIWeatherInsight(data) {
 
   let advice = "";
 
-  // Temperature logic
+// Temperature-based advice
   if (temp < 5) {
     advice += "🥶 It's very cold — wear heavy layers, gloves, and stay warm. ";
   } else if (temp < 15) {
@@ -299,7 +340,7 @@ function generateAIWeatherInsight(data) {
     advice += "🔥 It's hot — stay hydrated and wear light clothes. ";
   }
 
-  // Condition logic
+  // Condition-based advice
   if (condition.includes("rain")) {
     advice += "☔ Don't forget an umbrella. ";
   }
@@ -329,6 +370,11 @@ function generateAIWeatherInsight(data) {
   return `In ${data.city}, it's ${temp}°C with ${condition}. ${advice}`;
 }
 
+// =====================
+// CLOTHING ADVICE
+// =====================
+
+// Suggests clothing based on temperature + weather
 function clothingAdvice(temp, condition) {
   let advice = "";
 
@@ -344,8 +390,10 @@ function clothingAdvice(temp, condition) {
 }
 
 // =====================
-// FORM SUBMIT
+// EVENT LISTENERS
 // =====================
+
+// Search form submit
 document.querySelector("#search-form")
   .addEventListener("submit", (event) => {
     event.preventDefault();
@@ -355,6 +403,8 @@ document.querySelector("#search-form")
 // =====================
 // FORECAST
 // =====================
+
+// Forecast fetch
 function getForecast(city) {
   let apiKey = "8bcecf3b930c0252ec9aa584f9do621t";
   let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
@@ -362,6 +412,7 @@ function getForecast(city) {
   axios.get(apiUrl).then(displayForecast);
 }
 
+// Forecast rendering
 function displayForecast(response) {
   let forecastHtml = "";
 
@@ -393,6 +444,8 @@ function displayForecast(response) {
   document.querySelector("#forecast").innerHTML = forecastHtml;
 }
 
+
+// Formats forecast day label
 function formatDay(timestamp) {
   return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(timestamp * 1000).getDay()];
 }
@@ -400,6 +453,8 @@ function formatDay(timestamp) {
 // =====================
 // CURRENT LOCATION
 // =====================
+
+// Uses browser geolocation
 document.querySelector("#current-location").addEventListener("click", () => {
   navigator.geolocation.getCurrentPosition((position) => {
     let apiKey = "8bcecf3b930c0252ec9aa584f9do621t";
@@ -411,8 +466,10 @@ document.querySelector("#current-location").addEventListener("click", () => {
 
 
 // =====================
-// DARK MODE
+// UI FEATURES
 // =====================
+
+// Dark Mode Toggle
 document.querySelector("#theme-toggle").addEventListener("click", () => {
   document.body.classList.toggle("dark");
 
@@ -425,6 +482,8 @@ document.querySelector("#theme-toggle").addEventListener("click", () => {
 // =====================
 // RANDOM CITY
 // =====================
+
+// Random city feature
 document.querySelector("#random-city").addEventListener("click", () => {
   let random = cities[Math.floor(Math.random() * cities.length)];
   searchCity(random);
@@ -433,6 +492,8 @@ document.querySelector("#random-city").addEventListener("click", () => {
 // =====================
 // UNIT TOGGLE
 // =====================
+
+// Unit conversion (Fahrenheit)
 document.querySelector("#fahrenheit").addEventListener("click", () => {
   if (currentTemp === null) return;
   document.querySelector("#temperature").innerHTML =
@@ -442,6 +503,7 @@ document.querySelector("#fahrenheit").addEventListener("click", () => {
   document.querySelector("#celsius").classList.remove("active-unit");
 });
 
+// Unit conversion (Celsius)
 document.querySelector("#celsius").addEventListener("click", () => {
   if (currentTemp === null) return;
   document.querySelector("#temperature").innerHTML = Math.round(currentTemp);
@@ -450,9 +512,10 @@ document.querySelector("#celsius").addEventListener("click", () => {
   document.querySelector("#fahrenheit").classList.remove("active-unit");
 });
 
+// =====================
+// INITIAL LOAD
+// =====================
 
-// =====================
-// DEFAULT
-// =====================
+// Focus input and load default city
 document.querySelector("#search-input").focus();
 searchCity("London");
