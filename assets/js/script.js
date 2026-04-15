@@ -111,14 +111,23 @@ function refreshWeather(response) {
   response.data.coordinates.latitude,
   response.data.coordinates.longitude
 );
-}
+
+// AI Assistant
+const aiText = generateAIWeatherInsight(response.data);
+document.querySelector("#ai-text").innerHTML = aiText;
+
+// Clothing Advice
+clothingAdvice(
+  response.data.temperature.current,
+  response.data.condition.description.toLowerCase()
+);
 
 // UPDATED TIME FEATURE
   setInterval(() => {
   document.querySelector("#updated-time").innerHTML =
     "Updated: " + new Date().toLocaleTimeString();
 }, 1000);
-
+}
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // km
@@ -136,6 +145,26 @@ function getDistance(lat1, lon1, lat2, lon2) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   return R * c;
+}
+
+function searchCityByCoords(lat, lon) {
+  document.querySelector("#loader").classList.remove("hidden");
+  document.querySelector("#weather-content").classList.add("hidden");
+  document.querySelector("#error-message").classList.add("hidden");
+
+  let apiKey = "8bcecf3b930c0252ec9aa584f9do621t";
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?lat=${lat}&lon=${lon}&key=${apiKey}&units=metric`;
+
+  axios.get(apiUrl)
+    .then((response) => {
+      refreshWeather(response);
+      addToHistory(response.data.city);
+    })
+    .catch(() => {
+      document.querySelector("#loader").classList.add("hidden");
+      document.querySelector("#weather-content").classList.add("hidden");
+      document.querySelector("#error-message").classList.remove("hidden");
+    });
 }
 
 function getNearby(city, lat, lon) {
@@ -163,16 +192,28 @@ function getNearby(city, lat, lon) {
 
   container.innerHTML = sorted
     .map(c => `
-      <button class="history-btn nearby-btn" data-city="${c.city}">
+      <button 
+        class="history-btn nearby-btn" 
+        data-city="${c.city}"
+        data-lat="${c.lat}"
+        data-lon="${c.lon}"
+      >
         📍 ${c.city} <span class="muted">(${Math.round(c.distance)} km)</span>
       </button>
     `)
     .join("");
 
-  // attach events safely (no inline onclick)
+  // ✅ UPDATED CLICK HANDLER
   container.querySelectorAll(".nearby-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      searchCity(btn.dataset.city);
+      const lat = parseFloat(btn.dataset.lat);
+      const lon = parseFloat(btn.dataset.lon);
+
+      if (!isNaN(lat) && !isNaN(lon)) {
+        searchCityByCoords(lat, lon);
+      } else {
+        searchCity(btn.dataset.city); // fallback
+      }
     });
   });
 }
@@ -237,6 +278,69 @@ function renderHistory() {
       searchCity(btn.innerText);
     });
   });
+}
+
+function generateAIWeatherInsight(data) {
+  const temp = Math.round(data.temperature.current);
+  const condition = data.condition.description.toLowerCase();
+  const wind = data.wind.speed;
+  const humidity = data.temperature.humidity;
+
+  let advice = "";
+
+  // Temperature logic
+  if (temp < 5) {
+    advice += "🥶 It's very cold — wear heavy layers, gloves, and stay warm. ";
+  } else if (temp < 15) {
+    advice += "🧥 It's chilly — a jacket is recommended. ";
+  } else if (temp < 25) {
+    advice += "😊 Comfortable weather — light clothing is fine. ";
+  } else {
+    advice += "🔥 It's hot — stay hydrated and wear light clothes. ";
+  }
+
+  // Condition logic
+  if (condition.includes("rain")) {
+    advice += "☔ Don't forget an umbrella. ";
+  }
+  if (condition.includes("snow")) {
+    advice += "❄️ Snowy conditions — wear boots and be careful outside. ";
+  }
+  if (condition.includes("clear")) {
+    advice += "☀️ Clear skies — great day to be outside! ";
+  }
+  if (condition.includes("cloud")) {
+    advice += "☁️ A bit cloudy — still okay for plans. ";
+  }
+  if (condition.includes("storm")) {
+    advice += "⛈️ Stormy weather — best to stay indoors. ";
+  }
+
+  // Wind logic
+  if (wind > 25) {
+    advice += "💨 It's quite windy — secure loose items. ";
+  }
+
+  // Humidity logic
+  if (humidity > 80) {
+    advice += "💧 High humidity — it may feel warmer than it is. ";
+  }
+
+  return `In ${data.city}, it's ${temp}°C with ${condition}. ${advice}`;
+}
+
+function clothingAdvice(temp, condition) {
+  let advice = "";
+
+  if (temp < 5) advice = "🧥 Heavy coat, gloves, scarf";
+  else if (temp < 15) advice = "🧥 Jacket or hoodie";
+  else if (temp < 25) advice = "👕 T-shirt or light layers";
+  else advice = "☀️ Stay cool — light clothes";
+
+  if (condition.includes("rain")) advice += " + ☔ umbrella";
+  if (condition.includes("snow")) advice += " + 🥾 boots";
+
+  document.querySelector("#advice").innerHTML = advice;
 }
 
 // =====================
