@@ -43,10 +43,9 @@ To use the app:
 
 ## 🔗 Live Demo & Repository
 Application can be viewed here: 
-* [Live](https://ya-weather-app.netlify.app/)
-
-* [Repository](https://github.com/yvonnesarah/weather-app)
-
+* 🌐 Live: https://ya-weather-app.netlify.app/
+* 💻 Repository: (https://github.com/yvonnesarah/weather-app
+  
 ## 🖼 Screenshot
 Before Design
 
