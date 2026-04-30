@@ -142,6 +142,25 @@ These enhancements elevate the Weather App by improving security, performance, a
 * Fetches: Current weather data, 5-day forecast data ✅
 * Fully dynamic data rendering ✅
 
+## 🧠 Challenges & Learnings
+🚧 Challenges Faced
+
+1. API Integration Complexity – Handling asynchronous requests with Axios and ensuring consistent data rendering from the SheCodes Weather API.
+2. Geolocation Accuracy – Implementing the current location feature while managing browser permissions and fallback behaviors.
+3. Nearby Cities Calculation – Using the Haversine formula to accurately compute distances between cities and dynamically sort results.
+4. State Management in Vanilla JavaScript – Keeping UI elements (weather, forecast, theme, history) in sync without a framework.
+5. Responsive Design – Ensuring a seamless experience across mobile, tablet, and desktop devices with flexible layouts.
+6. Error Handling – Gracefully managing invalid city searches, failed API requests, and empty responses without breaking the UI.
+
+📚 Key Learnings
+
+1. Improved understanding of REST API consumption using Axios and handling asynchronous JavaScript.
+2. Gained experience in transforming raw API data into meaningful UI components.
+3. Strengthened skills in responsive design and CSS architecture, including the use of variables for theming (light/dark mode).
+4. Learned how to implement real-world algorithms like the Haversine formula for geospatial calculations.
+5. Improved debugging and problem-solving skills when working with dynamic UI updates and multiple interconnected features.
+6. Enhanced ability to design a user-friendly experience, focusing on clarity, speed, and interactivity.
+
 ## 👥 Credit
 Designed and developed by Yvonne Adedeji.
 
